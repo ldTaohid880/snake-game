@@ -1,19 +1,31 @@
 #pragma once
 #include "Main.h"
+#include "helper.h"
+
+class Food;
+
+struct BodySegment {
+	int x;
+	int y;
+};
+
 class Snake
 {
 public:
-	int currentSize = 3;
-	int body[3][2] = { {0,0},{1,0},{2,0} };
+
+	std::vector<BodySegment> body;
 	enum MovingDir {
 		RIGHT,
 		DOWN,
 		LEFT,
 		UP
 	};
+	Snake();
 	MovingDir dir = RIGHT;
 	void draw(Gdiplus::Graphics& g);
 	void move();
-	BOOL isEatingFood(Food f);
+	void grow();
+	BOOL isEatingFood(Food &f);
+	BOOL isColideWithOwnBody();
 };
 

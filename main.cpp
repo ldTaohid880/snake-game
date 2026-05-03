@@ -3,7 +3,7 @@
 #include "Snake.h"
 
 static Snake snake;
-static Food snakeFood;
+static Food snakeFood(snake);
 static int score = 0;
 
 DWORD lastMoveTime = 0;
@@ -81,16 +81,25 @@ LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		return 0;
 	}
 	case WM_TIMER: {
+		snake.move();
 
 		DWORD now = GetTickCount64();
 
 		if (now - lastMoveTime >= moveDelay) {
-			snake.move();
 			lastMoveTime = now;
 		}
 		if (snake.isEatingFood(snakeFood)) {
 			score++;
-			snakeFood.respon();
+			snakeFood.respon(snake);
+			snake.grow();
+		}
+
+		if (snake.isColideWithOwnBody()) {
+			KillTimer(hwnd, 1);
+			std::wstring scoreText = L"Game Over! Score: " + std::to_wstring(score);
+			MessageBox(hwnd, scoreText.c_str(), L"Collision", MB_OK);
+			snake = Snake(); // Reset snake
+			score = 0; // Reset score
 		}
 
 		InvalidateRect(hwnd, NULL, FALSE);

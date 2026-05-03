@@ -1,5 +1,26 @@
-#include "Main.h" 
 #include "Food.h"
+#include "Snake.h"
+
+Food::Food(Snake &s) {
+
+
+	bool valid = false;
+
+	while (!valid) {
+		valid = true;
+		position[0] = randInt(0, CELL_COUNT - 1);
+		position[1] = randInt(0, CELL_COUNT - 1);
+
+		for (int i = 0;i < s.body.size();i++) {
+			if (s.body[i].x == position[0] && s.body[i].y == position[1]) {
+				valid = false;
+				break;
+			}
+		}
+
+	}
+
+}
 
 void Food::draw(Gdiplus::Graphics& g) {
 	int x = position[0] * CELL_SIZE;
@@ -14,7 +35,21 @@ void Food::draw(Gdiplus::Graphics& g) {
 	g.FillEllipse(&brushOfFood, x, y, CELL_SIZE, CELL_SIZE);
 	g.DrawEllipse(&penOfFood, x, y, CELL_SIZE, CELL_SIZE);
 }
-void Food::respon() {
-	position[0] = randInt(0, CELL_COUNT - 1);
-	position[1] = randInt(0, CELL_COUNT - 1);
+
+void Food::respon(Snake &s) {
+	bool valid = false;
+
+	while (!valid) {
+		valid = true;
+		position[0] = randInt(0, CELL_COUNT - 1);
+		position[1] = randInt(0, CELL_COUNT - 1);
+
+		for (int i = 0;i < s.body.size();i++) {
+			if (s.body[i].x == position[0] && s.body[i].y == position[1]) {
+				valid = false;
+				break;
+			}
+		}
+
+	}
 }

@@ -1,5 +1,4 @@
-#include <random>
-#include "Main.h"
+#include "helper.h"
 
 int randInt(int min, int max) {
 	// 1. Seed with a real random value from hardware if available
