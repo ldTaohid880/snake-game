@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "Food.h"
 #include "Snake.h"
+#include "GameOver_window.h"
 
 static Snake snake;
 static Food snakeFood(snake);
@@ -96,10 +97,16 @@ LRESULT CALLBACK mainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 		if (snake.isColideWithOwnBody()) {
 			KillTimer(hwnd, 1);
-			std::wstring scoreText = L"Game Over! Score: " + std::to_wstring(score);
-			MessageBox(hwnd, scoreText.c_str(), L"Collision", MB_OK);
-			snake = Snake(); // Reset snake
-			score = 0; // Reset score
+			bool restart = showGameOverWindow(GetModuleHandle(NULL), hwnd, score);
+			if (restart) {
+				// Reset game state and resume timer
+				snake = Snake();
+				score = 0;
+				SetTimer(hwnd, 1, moveDelay, NULL);
+			} else {
+				// Exit application
+				PostQuitMessage(0);
+			}
 		}
 
 		InvalidateRect(hwnd, NULL, FALSE);
